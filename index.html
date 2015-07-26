@@ -5,10 +5,15 @@
 		<script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
 		<script type="text/javascript">
 			console.log('Music Downloader Initializing');
+			
 
 			var OnLoadCallback = function() {
-				console.log("Google API");
-				gapi.client.setApiKey("AIzaSyCiPxAwCU9pYK6NQaeShqhJvLUyiHKSSGI");
+				console.log('OnLoadCallback');
+				gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
+			}
+			
+			var onYouTubeApiLoad = function() {
+				gapi.client.setApiKey('AIzaSyCiPxAwCU9pYK6NQaeShqhJvLUyiHKSSGI');
 			}
 
 			Herpicus.Ready(function() {
@@ -38,16 +43,8 @@
 						tracklist.list.HTML('Search results for "' + searchbar.Text() + '"');
 						tracklist.list.Append('<li><span class="name">Example</span><span class="time">0:30</span><span class="download">Download</span></li>');
 
-						Herpicus.Http({
-							URL: "https://accounts.google.com/o/oauth2/auth",
-							Headers: [
-								{"Access-Control-Allow-Origin": "*"},
-								{"Content-Type": "application/x-www-form-urlencoded"}
-							],
-							Callback: function(response) {
-								console.log(response);
-							}
-						});
+						var results = YouTube.Search.list('id,snippet', {q: encodeURIComponent(searchbar.Text()), maxResults: 25});
+						console.log(results);
 						// append results to tracklist.list
 						timeout = null;
 					}, 1000);
