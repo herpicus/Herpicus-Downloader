@@ -9,11 +9,13 @@
 
 			var OnLoadCallback = function() {
 				console.log('OnLoadCallback');
-				gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
+				gapi.client.load('youtube', 'v3', function() {
+					gapi.client.setApiKey('AIzaSyCiPxAwCU9pYK6NQaeShqhJvLUyiHKSSGI');
+				});
 			}
 			
-			var onYouTubeApiLoad = function() {
-				gapi.client.setApiKey('AIzaSyCiPxAwCU9pYK6NQaeShqhJvLUyiHKSSGI');
+			var youtube = function(response) {
+				console.log(response)
 			}
 
 			Herpicus.Ready(function() {
@@ -44,6 +46,7 @@
 						tracklist.list.Append('<li><span class="name">Example</span><span class="time">0:30</span><span class="download">Download</span></li>');
 
 						var results = YouTube.Search.list('id,snippet', {q: encodeURIComponent(searchbar.Text()), maxResults: 25});
+						request.execute(youtube)
 						console.log(results);
 						// append results to tracklist.list
 						timeout = null;
